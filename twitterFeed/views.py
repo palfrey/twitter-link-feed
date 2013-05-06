@@ -11,8 +11,8 @@ from django.utils import timezone
 def home(request, token = None):
 	auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, request.build_absolute_uri())
 
-	if token != None and TwitterAuthToken.objects.filter(id__exact = token).count() > 0:
-		tat = TwitterAuthToken.objects.get(id = token)
+	if token != None and TwitterAuthToken.objects.filter(key__exact = token).count() > 0:
+		tat = TwitterAuthToken.objects.get(key = token)
 		auth.set_access_token(tat.key, tat.secret)
 	else:
 		verifier = request.GET.get('oauth_verifier', None)
@@ -34,7 +34,7 @@ def home(request, token = None):
 			tat.secret = auth.access_token.secret
 			tat.save()
 			request.session['tat'] = tat.id
-			return HttpResponseRedirect("/%d"%tat.id)
+			return HttpResponseRedirect("/%s"%tat.key)
 
 	now = timezone.make_aware(datetime.datetime.now(), timezone.get_default_timezone())
 	

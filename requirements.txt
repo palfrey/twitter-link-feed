@@ -1,6 +1,7 @@
 ## The following requirements were added by pip --freeze:
 Django==1.5.1
 MySQL-python==1.2.3
+South==0.8.1
 argparse==1.2.1
 distribute==0.6.24
 feedgenerator==1.5

@@ -127,12 +127,15 @@ ROOT_URLCONF = 'twitterFeed.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'twitterFeed.wsgi.application'
 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+	os.path.join(PROJECT_ROOT, "templates"),
 )
 
+GENSHI_TEMPLATE_LOADERS = (
+	'django_genshi.loaders.filesystem.load_template',
+	'django_genshi.loaders.app_directories.load_template',
+)
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

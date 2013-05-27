@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:py="http://genshi.edgewall.org/">
+	<head>
+		<title>Infinite Feed</title>
+	</head>
+	<body>
+		<ul>
+			<li>
+				<a href="${token}/home">Home</a>
+			</li>
+			<li py:for="list in lists">
+				<a href="${token}/${list.slug}">${list.name}</a>
+			</li>
+		</ul>
+	</body>
+</html>
+

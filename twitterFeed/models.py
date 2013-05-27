@@ -9,3 +9,9 @@ class TwitterAuthToken(models.Model):
 
 	def __str__(self):
 		return "key: '%s' secret: '%s'"%(self.key, self.secret)
+
+class ListData(models.Model):
+	token = models.ForeignKey(TwitterAuthToken)
+	name = models.CharField(max_length = 200)
+	content = models.TextField()
+	last = models.DateTimeField(null = True, blank = True)

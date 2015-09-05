@@ -8,9 +8,10 @@ from django.utils import feedgenerator
 import datetime
 from django.utils import timezone
 from django_genshi import render_to_response
+import os
 
 def authenticate(request, token = None):
-	auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, request.build_absolute_uri())
+	auth = tweepy.OAuthHandler(os.environ["TWITTER_CONSUMER_KEY"], os.environ["TWITTER_CONSUMER_SECRET"], request.build_absolute_uri())
 
 	if token != None and TwitterAuthToken.objects.filter(key__exact = token).count() > 0:
 		tat = TwitterAuthToken.objects.get(key = token)

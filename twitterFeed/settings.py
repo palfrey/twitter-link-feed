@@ -1,7 +1,6 @@
 # Django settings for twitterFeed project.
 
 import os
-from settings_private import *
 import dj_database_url
 
 DEBUG = True

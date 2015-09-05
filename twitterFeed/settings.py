@@ -2,6 +2,7 @@
 
 import os
 from settings_private import *
+import dj_database_url
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -12,34 +13,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-## Pull in CloudFoundry's production settings
-if 'VCAP_SERVICES' in os.environ:
-	import json
-	vcap_services = json.loads(os.environ['VCAP_SERVICES'])
-	# XXX: avoid hardcoding here
-	mysql_srv = vcap_services['mysql-5.1'][0]
-	cred = mysql_srv['credentials']
-	DATABASES = {
-		'default': {
-			'ENGINE': 'django.db.backends.mysql',
-			'NAME': cred['name'],
-			'USER': cred['user'],
-			'PASSWORD': cred['password'],
-			'HOST': cred['hostname'],
-			'PORT': cred['port'],
-			}
-		}
-else:
-	DATABASES = {
-		"default": {
-			"ENGINE": "django.db.backends.sqlite3",
-			"NAME": "dev.db",
-			"USER": "",
-			"PASSWORD": "",
-			"HOST": "",
-			"PORT": "",
-			}
-		}
+DATABASES = {'default': dj_database_url.config(default='sqlite:///dev.db')}
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts

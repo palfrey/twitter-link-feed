@@ -20,20 +20,20 @@ def authenticate(request, token = None):
 		verifier = request.GET.get('oauth_verifier', None)
 		if verifier == None:
 			redirect_url = auth.get_authorization_url()
-			request.session['request_token'] = (auth.request_token.key, auth.request_token.secret)
+			request.session['request_token'] = auth.request_token
 			return HttpResponseRedirect(redirect_url)
 		else:
 			token = request.session.get('request_token')
 			request.session.delete('request_token')
-			auth.set_request_token(token[0], token[1])
+			auth.request_token = token
 			auth.get_access_token(verifier)
 
-			tat = TwitterAuthToken.objects.filter(key__exact = auth.access_token.key)
+			tat = TwitterAuthToken.objects.filter(key__exact = auth.access_token)
 			if tat.count() == 0:
-				tat = TwitterAuthToken(key = auth.access_token.key)
+				tat = TwitterAuthToken(key = auth.access_token)
 			else:
 				tat = tat[0]
-			tat.secret = auth.access_token.secret
+			tat.secret = auth.access_token_secret
 			tat.save()
 			request.session['tat'] = tat.id
 			return HttpResponseRedirect("/%s"%tat.key)
@@ -58,7 +58,7 @@ def generate_feed(feed, statuses):
 			continue
 		while hasattr(status, "retweeted_status") and status.retweeted_status != None:
 			status = status.retweeted_status
-		
+
 		urls = status.entities["urls"]
 
 		badsites = ["4sq.com", "instagram.com"]
@@ -76,8 +76,6 @@ def generate_feed(feed, statuses):
 				status.text = status.text[:u["indices"][0]] + u["expanded_url"] + status.text[u["indices"][1]:]
 			feed.add_item(title = "@%s %s" %(status.author.screen_name, status.text), link = urls[0]["expanded_url"], description = "")
 
-
-		
 def home(request, token = None):
 	ret = authenticate(request, token)
 	if isinstance(ret, tweepy.OAuthHandler):
@@ -86,7 +84,7 @@ def home(request, token = None):
 	else:
 		return ret
 	now = timezone.make_aware(datetime.datetime.now(), timezone.get_default_timezone())
-	
+
 	checktime = now - datetime.timedelta(minutes = 10)
 	if tat.last == None or tat.timeline == None or len(tat.timeline) == 0 or tat.last < checktime:
 		api = tweepy.API(auth)
@@ -118,7 +116,7 @@ def list(request, token, listname):
 		listdata = listdata[0]
 
 	now = timezone.make_aware(datetime.datetime.now(), timezone.get_default_timezone())
-	
+
 	checktime = now - datetime.timedelta(minutes = 10)
 	if listdata.last == None or listdata.content == None or len(listdata.content) == 0 or listdata.last < checktime:
 		api = tweepy.API(auth)
@@ -133,4 +131,3 @@ def list(request, token, listname):
 	)
 	generate_feed(feed, pickle.loads(b64decode(listdata.content)))
 	return HttpResponse(feed.writeString("utf-8"))
-

@@ -121,6 +121,9 @@ def list(request, token, listname):
 	checktime = now - datetime.timedelta(minutes = 10)
 	if listdata.last == None or listdata.content == None or len(listdata.content) == 0 or listdata.last < checktime:
 		api = tweepy.API(auth)
+		if tat.username == '' or tat.username == None:
+			tat.username = auth.get_username()
+			tat.save()
 		user_id = api.get_user(screen_name = tat.username).id
 		listdata.content = b64encode(pickle.dumps(api.list_timeline(slug = listdata.name, count = 200, owner_id = user_id)))
 		listdata.last = now

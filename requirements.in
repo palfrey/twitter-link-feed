@@ -1,5 +1,5 @@
 dj-database-url
-Django==1.11.29
+Django < 1.9 # Because https://github.com/django/django/commit/61ad1ea92b1f4df992b0ef1dcc7c781da2413815#diff-58b6a8a353bf6504ab42c97c9688243ce3c6eec8eab08525295aa9a1e66dd8cc for Genshi
 django-genshi
 gunicorn
 psycopg2-binary

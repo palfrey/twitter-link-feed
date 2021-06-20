@@ -1,0 +1,12 @@
+dj-database-url
+Django==1.11.29
+django-genshi
+gunicorn
+psycopg2-binary
+requests
+requests-oauthlib
+South
+tweepy
+waitress
+
+pip-tools

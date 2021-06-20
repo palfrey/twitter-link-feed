@@ -1,3 +1,4 @@
-bootstrap.py
+__pycache__
+*.pyc
+.vscode
 dev.db
-ENV

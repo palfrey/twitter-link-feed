@@ -118,7 +118,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 	'twitterFeed',
-	'south'
 )
 
 # A sample logging configuration. The only tangible logging

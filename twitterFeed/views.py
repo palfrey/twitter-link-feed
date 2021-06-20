@@ -1,7 +1,6 @@
-from settings import *
 import tweepy
 from django.http import HttpResponseRedirect, HttpResponse
-from models import *
+from .models import *
 import pickle
 from base64 import b64encode, b64decode
 from django.utils import feedgenerator
@@ -9,6 +8,7 @@ import datetime
 from django.utils import timezone
 from django_genshi import render_to_response
 import os
+from functools import reduce
 
 def authenticate(request, token = None):
 	auth = tweepy.OAuthHandler(os.environ["TWITTER_CONSUMER_KEY"], os.environ["TWITTER_CONSUMER_SECRET"], request.build_absolute_uri())

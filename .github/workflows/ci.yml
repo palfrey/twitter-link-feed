@@ -1,0 +1,19 @@
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 2.x
+          cache: 'pip'
+      - run: pip install -r requirements.txt          
+      - run: python -m twitterFeed.wsgi
+      - run: python manage.py test
